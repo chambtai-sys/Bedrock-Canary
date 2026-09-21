@@ -1,0 +1,18 @@
+# ==========================================
+# Bedrock Canary Sample App: Hello Canary
+# File extension: .bdc
+# ==========================================
+
+App HelloCanary {
+  theme: "dark"
+}
+
+State user_name = "Developer"
+
+Screen Welcome("Welcome to Bedrock Canary") {
+  Card {
+    Text("Hello, {user_name}!")
+    Text("Welcome to the easiest language for Web & Mobile apps.")
+    Button("Get Started") on click => next_page
+  }
+}

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to Bedrock Canary (.bdc) [BETA]</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Top Header Banner -->
+    <header class="top-header">
+      <div class="logo-group">
+        <div class="ascii-logo-badge">🐤</div>
+        <div class="header-titles">
+          <h1>Bedrock Canary <span class="beta-tag">[BETA]</span></h1>
+          <p>The programming language made easy for Web Apps & Mobile Apps</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <span class="file-ext-badge">File Format: <code>.bdc</code></span>
+        <a href="https://github.com/bedrock-canary" target="_blank" class="btn btn-secondary">Documentation</a>
+      </div>
+    </header>
+
+    <!-- Welcome Hero Section -->
+    <section class="welcome-hero">
+      <div class="hero-card">
+        <div class="hero-content">
+          <h2>🎉 Thanks for Installing Bedrock Canary!</h2>
+          <p>
+            You're all set to build incredible cross-platform Web and Mobile apps with simple, expressive <code>.bdc</code> code.
+            Try out the interactive playground below, select preset examples, or test live state updates in real-time!
+          </p>
+          <div class="features-row">
+            <div class="feature-chip">✨ Simple Syntax</div>
+            <div class="feature-chip">📱 Mobile & Web Targets</div>
+            <div class="feature-chip">⚡ Reactive State</div>
+            <div class="feature-chip">🛠️ Single CLI Binary</div>
+          </div>
+        </div>
+        <div class="ascii-banner-box">
+          <pre class="ascii-banner">
+    ____           ZH,                          ,HZ
+   / __ )___  ____/ /_______  ________  __     /  /
+  / __  / _ \/ __  / ___/ _ \/ ___/ / / /    /  /
+ / /_/ /  __/ /_/ / /  /  __/ /__/ /_/ /    /  /
+/_____/\___/\__,_/_/   \___/\___/\__,_/    /__/
+   ______
+  / ____/____ _____  ____ ________  __       ____  ______ _____ ______  __
+ / /   / __ `/ __ \/ __ `/ ___/ / / /      / __ \/ __ `/ ___// __ \/ / / /
+/ /___/ /_/ / / / / /_/ / /  / /_/ /      / /_/ / /_/ / /   / /_/ / /_/ /
+\____/\__,_/_/ /_/\__,_/_/   \__, /      / .___/\__,_/_/   / .___/\__, /
+                             /____/      /_/              /_/    /____/
+                                 [ BETA ]
+          </pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Live Playground & Previewer -->
+    <section class="playground-section">
+      <div class="section-header">
+        <h3>⚡ Interactive .bdc Code Playground</h3>
+        <div class="preset-selector">
+          <label>Load Example:</label>
+          <button class="preset-btn active" id="btn-preset-counter">Counter App</button>
+          <button class="preset-btn" id="btn-preset-task">Task Planner</button>
+          <button class="preset-btn" id="btn-preset-hello">Hello Canary</button>
+        </div>
+      </div>
+
+      <div class="playground-grid">
+        <!-- Editor Column -->
+        <div class="editor-pane">
+          <div class="pane-header">
+            <span class="pane-title">📝 Editor (app.bdc)</span>
+            <button class="btn btn-primary btn-sm" id="btn-run-code">▶ Run / Compile</button>
+          </div>
+          <textarea id="bdc-editor" spellcheck="false" placeholder="Write your .bdc code here..."></textarea>
+          <div class="editor-footer">
+            <span id="compiler-status">Status: Ready</span>
+          </div>
+        </div>
+
+        <!-- Live Preview Column -->
+        <div class="preview-pane">
+          <div class="pane-header">
+            <span class="pane-title">📱 Live App Target Viewport</span>
+            <div class="viewport-toggles">
+              <button class="toggle-btn active" id="btn-view-mobile">📱 Mobile</button>
+              <button class="toggle-btn" id="btn-view-web">💻 Web View</button>
+            </div>
+          </div>
+
+          <div class="preview-stage mobile-mode" id="preview-stage">
+            <div class="phone-device" id="phone-device">
+              <div class="phone-notch"></div>
+              <div class="phone-screen" id="preview-viewport">
+                <!-- Dynamically rendered Bedrock Canary App -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Syntax Cheatsheet Section -->
+    <section class="cheatsheet-section">
+      <h3>📚 Bedrock Canary Cheatsheet & Syntax Reference</h3>
+      <div class="cheatsheet-grid">
+        <div class="cheat-card">
+          <h4>1. State Declaration</h4>
+          <p>Declare reactive variables easily:</p>
+          <pre><code>State score = 0
+State username = "Alex"</code></pre>
+        </div>
+        <div class="cheat-card">
+          <h4>2. Event Actions</h4>
+          <p>Mutate state or change screens:</p>
+          <pre><code>Action addScore {
+  set score = score + 10
+}</code></pre>
+        </div>
+        <div class="cheat-card">
+          <h4>3. Screen Layouts</h4>
+          <p>Combine Stack, Row, Card and Buttons:</p>
+          <pre><code>Screen MainScreen("Dashboard") {
+  Card {
+    Text("Points: {score}")
+    Button("+ Add") on click => addScore
+  }
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bottom-footer">
+      <p>Bedrock Canary Programming Language (<code>.bdc</code>) • [BETA] Release • Making Web & Mobile Apps Simple</p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
