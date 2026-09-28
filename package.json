@@ -1,0 +1,23 @@
+{
+  "name": "bedrock-canary",
+  "version": "0.1.0-beta",
+  "description": "An easy-to-use programming language designed for making web apps and mobile apps.",
+  "main": "src/index.js",
+  "bin": {
+    "bdc": "bin/bdc.js"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "start": "node bin/bdc.js welcome"
+  },
+  "keywords": [
+    "bedrock-canary",
+    "bdc",
+    "programming-language",
+    "web-apps",
+    "mobile-apps",
+    "transpiler"
+  ],
+  "author": "Bedrock Canary Team",
+  "license": "MIT"
+}

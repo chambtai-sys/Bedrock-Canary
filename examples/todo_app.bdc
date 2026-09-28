@@ -1,0 +1,31 @@
+# ==========================================
+# Bedrock Canary Sample App: Task Planner
+# File extension: .bdc
+# ==========================================
+
+App TaskPlanner {
+  theme: "dark"
+}
+
+State total_tasks = 3
+State completed_tasks = 1
+
+Action add_task {
+  set total_tasks = total_tasks + 1
+}
+
+Action complete_task {
+  set completed_tasks = completed_tasks + 1
+}
+
+Screen TaskDashboard("Task Dashboard") {
+  Stack {
+    Text("Total Tasks: {total_tasks}")
+    Text("Completed: {completed_tasks}")
+    Card {
+      Text("⚡ Build Web & Mobile app with .bdc")
+      Button("Mark Done") on click => complete_task
+    }
+    Button("+ Add New Task") on click => add_task
+  }
+}

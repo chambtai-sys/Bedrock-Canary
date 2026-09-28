@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CounterApp - Bedrock Canary Application</title>
+  <style>
+    :root {
+      --primary: #f59e0b;
+      --primary-dark: #d97706;
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f8fafc;
+      --accent: #38bdf8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); display: flex; flex-direction: column; min-height: 100vh; align-items: center; justify-content: center; padding: 20px; }
+    .bdc-phone-frame { width: 100%; max-width: 420px; background: var(--card-bg); border-radius: 28px; border: 4px solid #334155; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); overflow: hidden; display: flex; flex-direction: column; min-height: 600px; position: relative; }
+    .bdc-header { background: #1e293b; border-bottom: 1px solid #334155; padding: 16px; text-align: center; font-weight: bold; font-size: 1.1rem; color: var(--primary); display: flex; justify-content: space-between; align-items: center; }
+    .bdc-badge { background: var(--primary); color: #000; font-size: 0.7rem; font-weight: 800; padding: 2px 8px; border-radius: 999px; text-transform: uppercase; }
+    .bdc-content { padding: 20px; flex: 1; display: flex; flex-direction: column; gap: 16px; }
+    .bdc-text { font-size: 1rem; color: #e2e8f0; }
+    .bdc-heading { font-size: 1.5rem; font-weight: bold; color: #fff; margin-bottom: 8px; }
+    .bdc-button { background: linear-gradient(135deg, #f59e0b, #d97706); border: none; color: #000; font-weight: 700; padding: 12px 20px; border-radius: 12px; cursor: pointer; transition: transform 0.1s, opacity 0.2s; text-align: center; display: inline-block; }
+    .bdc-button:active { transform: scale(0.97); }
+    .bdc-card { background: #0f172a; border: 1px solid #334155; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+    .bdc-stack { display: flex; flex-direction: column; gap: 12px; }
+    .bdc-row { display: flex; flex-direction: row; gap: 12px; align-items: center; justify-content: space-between; }
+    .bdc-input { background: #0f172a; border: 1px solid #334155; padding: 10px 14px; border-radius: 8px; color: #fff; font-size: 1rem; width: 100%; outline: none; }
+    .bdc-input:focus { border-color: var(--primary); }
+    .bdc-footer { font-size: 0.75rem; text-align: center; color: #64748b; padding: 12px; border-top: 1px solid #1e293b; }
+  </style>
+</head>
+<body>
+  <div class="bdc-phone-frame">
+    <div class="bdc-header">
+      <span id="bdc-title">CounterApp</span>
+      <span class="bdc-badge">BETA</span>
+    </div>
+    <div class="bdc-content" id="bdc-app-root"></div>
+    <div class="bdc-footer">Powered by Bedrock Canary (.bdc)</div>
+  </div>
+
+  <script>
+    const state = {"count":0};
+    const actions = [{"name":"add_one","params":[],"steps":[{"type":"SET_STATE","targetState":"count","expr":{"left":"count","op":"+","right":1}}]},{"name":"subtract_one","params":[],"steps":[{"type":"SET_STATE","targetState":"count","expr":{"left":"count","op":"-","right":1}}]}];
+    const screens = [{"name":"MainScreen","title":"Interactive Counter","elements":[{"type":"card","content":"","props":{},"children":[{"type":"text","content":"Current Count: {count}","props":{},"children":[]},{"type":"stack","content":"","props":{},"children":[{"type":"button","content":"+ Increment Counter","props":{"onClick":"add_one"},"children":[]},{"type":"button","content":"- Decrement Counter","props":{"onClick":"subtract_one"},"children":[]}]}]}]}];
+    let currentScreenIndex = 0;
+
+    function evaluateExpr(expr) {
+      let leftVal = state[expr.left] !== undefined ? state[expr.left] : expr.left;
+      if (expr.op) {
+        let rightVal = state[expr.right] !== undefined ? state[expr.right] : expr.right;
+        if (expr.op === '+') return Number(leftVal) + Number(rightVal);
+        if (expr.op === '-') return Number(leftVal) - Number(rightVal);
+      }
+      return leftVal;
+    }
+
+    function triggerAction(actionName) {
+      const act = actions.find(a => a.name === actionName);
+      if (!act) return;
+      act.steps.forEach(step => {
+        if (step.type === 'SET_STATE') {
+          state[step.targetState] = evaluateExpr(step.expr);
+        } else if (step.type === 'NAVIGATE') {
+          const idx = screens.findIndex(s => s.name === step.targetScreen || s.title === step.targetScreen);
+          if (idx !== -1) currentScreenIndex = idx;
+        }
+      });
+      render();
+    }
+
+    function renderElement(el) {
+      if (el.type === 'text') {
+        const div = document.createElement('div');
+        div.className = 'bdc-text';
+        let txt = el.content;
+        Object.keys(state).forEach(key => {
+          txt = txt.replace('{' + key + '}', state[key]);
+        });
+        div.innerText = txt;
+        return div;
+      }
+
+      if (el.type === 'button') {
+        const btn = document.createElement('button');
+        btn.className = 'bdc-button';
+        btn.innerText = el.content;
+        if (el.props && el.props.onClick) {
+          btn.onclick = () => triggerAction(el.props.onClick);
+        }
+        return btn;
+      }
+
+      if (el.type === 'stack' || el.type === 'card' || el.type === 'row') {
+        const container = document.createElement('div');
+        container.className = 'bdc-' + el.type;
+        (el.children || []).forEach(child => {
+          container.appendChild(renderElement(child));
+        });
+        return container;
+      }
+
+      const fallback = document.createElement('div');
+      fallback.innerText = el.content || el.type;
+      return fallback;
+    }
+
+    function render() {
+      const root = document.getElementById('bdc-app-root');
+      root.innerHTML = '';
+      const screen = screens[currentScreenIndex] || screens[0];
+      if (!screen) {
+        root.innerHTML = '<p>No screens defined.</p>';
+        return;
+      }
+      document.getElementById('bdc-title').innerText = screen.title || screen.name;
+      screen.elements.forEach(el => {
+        root.appendChild(renderElement(el));
+      });
+    }
+
+    render();
+  </script>
+</body>
+</html>

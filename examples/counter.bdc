@@ -1,0 +1,28 @@
+# ==========================================
+# Bedrock Canary Sample App: Counter
+# File extension: .bdc
+# ==========================================
+
+App CounterApp {
+  theme: "dark"
+}
+
+State count = 0
+
+Action add_one {
+  set count = count + 1
+}
+
+Action subtract_one {
+  set count = count - 1
+}
+
+Screen MainScreen("Interactive Counter") {
+  Card {
+    Text("Current Count: {count}")
+    Stack {
+      Button("+ Increment Counter") on click => add_one
+      Button("- Decrement Counter") on click => subtract_one
+    }
+  }
+}
